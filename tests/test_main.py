@@ -23,8 +23,26 @@ def test_docs():
     response: Response = client.get('/docs')
     assert response.status_code == 200
 
-def test_get_products():
+def test_list_products():
 
     res: Response = client.get('/products')
     assert res.status_code == 200
     assert len(res.json()) == 5
+
+def test_get_product_by_id():
+    res: Response = client.get('/products/1')
+    assert res.status_code == 200
+
+    product = {
+        "id": 1,
+        "name": "Laptop",
+        "description": "A high performance laptop",
+        "price": 999.99,
+        "available": True
+    }
+
+    assert res.json() == product
+
+def test_not_get_product_by_inexistent_id():
+    res: Response = client.get('/products/6')
+    assert res.status_code == 404
