@@ -22,3 +22,9 @@ def test_docs():
     """
     response: Response = client.get('/docs')
     assert response.status_code == 200
+
+def test_get_products():
+
+    res: Response = client.get('/products')
+    assert res.status_code == 200
+    assert len(res.json()) == 5
