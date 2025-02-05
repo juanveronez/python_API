@@ -1,6 +1,6 @@
 from typing import Dict, List, Any
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 
 app = FastAPI()
 
@@ -47,5 +47,16 @@ def hello_world():
     return { "message": "hello world!" }
 
 @app.get('/products')
-def get_products():
+def list_products():
     return products
+
+@app.get('/products/{id}')
+def get_product_by_id(id: int, response: Response):
+    # next is used to get an iterable, get the next value of an iterable or the default if not exists
+    product = next((product for product in products if product["id"] == id), None)
+    if product:
+        return product
+    
+    response.status_code = 404
+    return {"Message": "Product not Found."}
+    
