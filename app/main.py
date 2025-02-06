@@ -22,9 +22,8 @@ def get_product_by_id(id: int):
     
     raise HTTPException(status_code=404, detail="Product not found")
 
-@app.post('/products')
+@app.post('/products', status_code = 201)
 def create_product(product: ProductSchema, response: Response):
     products.append(product)
 
-    response.status_code = 201
     return { "Message": "Product created successfully" }
