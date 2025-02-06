@@ -1,29 +1,11 @@
-from fastapi import FastAPI, Response, HTTPException
+from fastapi import FastAPI
 
-from .data import products
-from .schema import ProductSchema
+from .routes import router
 
 app = FastAPI()
+
+app.include_router(router)
 
 @app.get('/')
 def hello_world():
     return { "message": "hello world!" }
-
-@app.get('/products', response_model=list[ProductSchema])
-def list_products():
-    return products
-
-@app.get('/products/{id}', response_model=ProductSchema)
-def get_product_by_id(id: int):
-    # next is used to get an iterable, get the next value of an iterable or the default if not exists
-    product = next((product for product in products if product["id"] == id), None)
-    if product:
-        return product
-    
-    raise HTTPException(status_code=404, detail="Product not found")
-
-@app.post('/products', status_code = 201)
-def create_product(product: ProductSchema, response: Response):
-    products.append(product)
-
-    return { "Message": "Product created successfully" }
